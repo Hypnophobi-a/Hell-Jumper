@@ -1,50 +1,52 @@
-local load = function()
-    print("test")
-    anim8 = require("libraries/anim8")
+local itemDictionary = {
+    ["gold"] = {
+        value = 1,
+        animSpeed = .1,
+        spriteSheet = love.graphics.newImage("sprites/gold.png")
+    }
+}
 
-    itemDictionary = {
-        ["gold"] = {
-            value = 1,
-            spriteSheet = love.graphics.newImage("sprites/gold.png"),
-            animSpeed = .1
+local chestTable = {
+    ["chest0"] = {
+        animSpeed = .1,
+        spriteSheet = love.graphics.newImage("sprites/chest.png"),
+        contents = {
+            gold = 5
         }
     }
+}
 
-    -- Setup item animations
-    for k, v in pairs(itemDictionary) do
+local load = function()
+    print("Items loaded")
+    anim8 = require("libraries/anim8")
+
+    for k, v in pairs(itemDictionary) do -- Setup item animations
         itemDictionary[k].grid = anim8.newGrid(16, 16, itemDictionary[k].spriteSheet:getWidth(), itemDictionary[k].spriteSheet:getHeight())
         print("Setup animation grid for: "..k)
         itemDictionary[k].anim = anim8.newAnimation(itemDictionary[k].grid("1-5", 1), itemDictionary[k].animSpeed)
         print("Created animation for: "..k)
     end
+
+    for k, v in pairs(chestTable) do -- Setup chest animations
+        chestTable[k].grid = anim8.newGrid(32, 32, chestTable[k].spriteSheet:getWidth(), chestTable[k].spriteSheet:getHeight())
+        print("Setup animation grids for: "..k)
+        chestTable[k].anim1 = anim8.newAnimation(chestTable[k].grid("1-1", 3), chestTable[k].animSpeed)
+        chestTable[k].anim2 = anim8.newAnimation(chestTable[k].grid("1-1", 3), chestTable[k].animSpeed)
+        print("Created animation for: "..k)
+    end
 end
 
-local items = {
+local getDictionary = function()
+    return itemDictionary
+end
 
-}
-
-local spawnItem = function(x, y, item) -- If you want the amount of items to spawn to be fixed, set the minimum value to the desired number, and set maximum to nil.
-    --[[
-    local quantity = 0
-
-    if min and not max then
-        quantity = min
-    else
-        quantity = math.random(min, max)
-    end
-    --]]
-
-    for k, v in pairs(itemDictionary) do
-        if item == k then
-            --print("Trying to spawn: "..k)
-            -- add selected item to items table with coordinates for main.lua to spawn
-            -- this should also include the other data in itemDictionary + grid/animations
-            -- have function return table to use to spawn
-        end
-    end
+local getChest = function()
+    return chestTable
 end
 
 return { 
     load = load,
-    spawnItem = spawnItem
+    spawnItem = spawnItem,
+    getDictionary = getDictionary,
+    getChest = getChest
 }

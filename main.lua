@@ -10,18 +10,12 @@ love.load = function()
     playerLoad = require("utilities/player")
     player = playerLoad.load(world)
 
-    items = require("utilities/items")
-    items.load()
-
     camera = require("libraries/camera")
     cam = camera()
     cam.scale = cam.scale * config.scale
 
-    sti = require("libraries/sti")
-    gameMap = sti("maps/world.lua")
-
     mapLoader = require("utilities/world")
-    walls, chests = mapLoader.load()
+    walls = mapLoader.load()
 end
 
 love.update = function(dt)
@@ -34,10 +28,7 @@ end
 love.draw = function()
     cam:attach()
         gameMap:drawLayer(gameMap.layers["Tile Layer 1"])
-        gameMap:drawLayer(gameMap.layers["Tile Layer 2"])
         player.anim:draw(player.spriteSheet, player.collider:getX(), player.collider:getY(), nil, nil, nil, 32, 32)
-
-        --items.spawnItem(100, 100, "gold")
 
         if config.wireframe == true then
             world:draw()

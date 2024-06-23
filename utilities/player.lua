@@ -1,3 +1,6 @@
+anim8 = require("libraries/anim8")
+mapLoader = require("utilities/world")
+
 local player = {
     health = 10,
     score = 0,
@@ -10,7 +13,6 @@ local player = {
     spriteSheet = love.graphics.newImage("sprites/player.png")
 }
 
-anim8 = require("libraries/anim8")
 player.grid = anim8.newGrid(64, 64, player.spriteSheet:getWidth(), player.spriteSheet:getHeight())
 
 player.animations = {
@@ -104,39 +106,39 @@ local update = function(dt)
 
     player.anim:update(dt)
 
-    if player.collider:enter("Chest") then
-        print("touched chest")
-    end
+    --[[
+        if player.collider:enter("Chest") then
+            print("touched chest")
+        end
+    ]]--
+end
 
-    function love.keypressed(key, scancode, isrepeat)
-        if scancode == "e" then --interact with objects in Chest/hEALTH class
-            local px, py = player.collider:getPosition()
-    
-            if player.dir == "right" then
-                px = px + 16
-            elseif player.dir == "left" then
-                px = px - 16
-            elseif player.dir == "up" then
-                py = py - 16
-            elseif player.dir == "down" then
-                py = py + 16
-            end
-    
-            local colliders = world:queryCircleArea(px, py, 16, {"Chest"})
-            if #colliders > 0 then            
-                for i = 1, #colliders do
-                    if colliders[i].state == "unopened" then
-                        colliders[i].state = "opened"
-                        print("I opened the chest")
-                        player.score = player.score + 1
-                    else
-                        print("no more loot it's been opened")
-                    end
+function love.keypressed(key, scancode, isrepeat)
+    if scancode == "e" then
+        local px, py = player.collider:getPosition()
+
+        if player.dir == "right" then
+            px = px + 16
+        elseif player.dir == "left" then
+            px = px - 16
+        elseif player.dir == "up" then
+            py = py - 16
+        elseif player.dir == "down" then
+            py = py + 16
+        end
+
+        local colliders = world:queryCircleArea(px, py, 16, {"Chest"})
+
+        if #colliders > 0 then      
+            for i = 1, #colliders do
+                if colliders[i].state == 0 then
+                    colliders[i].state = 1
+                    mapLoader.openChest(colliders[i].name) --this code is shit, make it work and not shit as per first item on to do list
                 end
             end
         end
-     end
-end
+    end
+ end
 
 return { 
     load = load,
