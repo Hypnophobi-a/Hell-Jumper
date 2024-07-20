@@ -11,10 +11,19 @@ local chestTable = {
         animSpeed = .1,
         spriteSheet = love.graphics.newImage("sprites/chest.png"),
         contents = {
-            gold = 5
+            gold = 5,
+            silver = 5
         }
     }
 }
+
+local getDictionary = function()
+    return itemDictionary
+end
+
+local getChest = function()
+    return chestTable
+end
 
 local load = function()
     print("Items loaded")
@@ -34,14 +43,6 @@ local load = function()
         chestTable[k].anim2 = anim8.newAnimation(chestTable[k].grid("1-1", 3), chestTable[k].animSpeed)
         print("Created animation for: "..k)
     end
-end
-
-local getDictionary = function()
-    return itemDictionary
-end
-
-local getChest = function()
-    return chestTable
 end
 
 return { 

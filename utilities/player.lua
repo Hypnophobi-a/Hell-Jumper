@@ -2,7 +2,8 @@ anim8 = require("libraries/anim8")
 mapLoader = require("utilities/world")
 
 local player = {
-    health = 10,
+    health = 20,
+    staminaMax = 10,
     score = 0,
     dir = "down",
     speed = 99,
@@ -12,6 +13,8 @@ local player = {
     runningAnimSpeed = 0.1,
     spriteSheet = love.graphics.newImage("sprites/player.png")
 }
+
+player.stamina = player.staminaMax
 
 player.grid = anim8.newGrid(64, 64, player.spriteSheet:getWidth(), player.spriteSheet:getHeight())
 
@@ -41,9 +44,10 @@ local update = function(dt)
     local isSprinting = false
     local vx, vy = 0, 0
 
-    if love.keyboard.isDown("lshift") then
+    if love.keyboard.isDown("lshift") and player.stamina > 0 then
         isSprinting = true
         player.speed = player.runSpeed
+        player.stamina = player.stamina - 0.05
     else
         player.speed = player.walkSpeed
     end
@@ -104,6 +108,10 @@ local update = function(dt)
         player.anim:gotoFrame(1)
     end
 
+    if player.stamina < player.staminaMax then
+        player.stamina = player.stamina + 0.01
+    end
+
     player.anim:update(dt)
 
     --[[
@@ -130,11 +138,9 @@ function love.keypressed(key, scancode, isrepeat)
         local colliders = world:queryCircleArea(px, py, 16, {"Chest"})
 
         if #colliders > 0 then      
-            for i = 1, #colliders do
-                if colliders[i].state == 0 then
-                    colliders[i].state = 1
-                    mapLoader.openChest(colliders[i].name) --this code is shit, make it work and not shit as per first item on to do list
-                end
+            if colliders[1].state == 0 then
+                colliders[1].state = 1 -- Set the chest state as opened
+                mapLoader.openChest(colliders[1].name)
             end
         end
     end

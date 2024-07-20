@@ -1,7 +1,7 @@
 # Todo List
 
-- Fix more than one interaction with chest: https://imgur.com/a/amcSjFB
-- Make stamina actually go down when sprinting/regenerate over time
-- Add black borders so you can't see beyond the maps edge
-- Change config/settings to take input from a JSON file
-- Allow players to create JSON files to add custom items
+- Draw chest sprites
+- Finish spawnItem + draw item sprites
+- Make sprinting/stamina better
+- Improve camera so you can't see beyond the maps edge OR add trees/objects around the maps edge so the camera can't see past it
+- Add skybox for sky/floating areas

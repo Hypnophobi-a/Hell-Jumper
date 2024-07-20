@@ -15,7 +15,7 @@ love.load = function()
     cam.scale = cam.scale * config.scale
 
     mapLoader = require("utilities/world")
-    walls = mapLoader.load()
+    mapLoader.load()
 end
 
 love.update = function(dt)
@@ -36,5 +36,6 @@ love.draw = function()
     cam:detach()
 
     love.graphics.print("Health: "..player.health, 8, 8)
-    love.graphics.print("Score: "..player.score, 8, 24)
+    love.graphics.print("Stamina: "..player.stamina, 8, 24)
+    love.graphics.print("Gold: "..player.score, 8, 40)
 end
